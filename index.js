@@ -69,7 +69,7 @@ const {
 if (!fs.existsSync(__dirname + '/sessions/creds.json')) {
     if(!config.SESSION_ID) return console.log('Please add your session to SESSION_ID env !!')
     
-    const sessdata = config.SESSION_ID.replace("ARSLAN-MD~", '');
+    const sessdata = config.SESSION_ID.replace("MUZAMMIL-MD~", '');
     try {
         // Decode base64 string
         const decodedData = Buffer.from(sessdata, 'base64').toString('utf-8');
