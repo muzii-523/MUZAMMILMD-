@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
-const config = require('../config');    
+const config = require('../config');
 const { cmd } = require('../command');
 
 cmd({
@@ -13,7 +13,7 @@ cmd({
     filename: __filename,
 },
 async (conn, mek, m, { from, reply }) => {
-    const githubRepoURL = 'https://github.com/muzii-523/MUZAMMILMD';
+    const githubRepoURL = 'https://github.com/hissari-786/Muzammil-MD'; // ✅ Fixed Repo Link
 
     try {
         // Extract username and repo name from the URL
@@ -47,26 +47,28 @@ async (conn, mek, m, { from, reply }) => {
             }
         }, { quoted: mek });
 
-        // Send local audio file
+        // Send local audio file (menu sound)
         const audioPath = path.join(__dirname, '../assets/menu.m4a');
-        await conn.sendMessage(from, {
-            audio: fs.readFileSync(audioPath),
-            mimetype: 'audio/mp4',
-            ptt: true,
-            contextInfo: { 
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363403831162407@newsletter',
-                    newsletterName: '𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿',
-                    serverMessageId: 143
+        if (fs.existsSync(audioPath)) {
+            await conn.sendMessage(from, {
+                audio: fs.readFileSync(audioPath),
+                mimetype: 'audio/mp4',
+                ptt: true,
+                contextInfo: { 
+                    mentionedJid: [m.sender],
+                    forwardingScore: 999,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363403831162407@newsletter',
+                        newsletterName: '𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿',
+                        serverMessageId: 143
+                    }
                 }
-            }
-        }, { quoted: mek });
+            }, { quoted: mek });
+        }
 
     } catch (error) {
         console.error("Error in repo command:", error);
-        reply("Sorry, something went wrong while fetching the repository information. Please try again later.");
+        reply("❌ Sorry bhai, GitHub repository info fetch karte waqt error aa gaya. Thodi der baad try karo.");
     }
 });
