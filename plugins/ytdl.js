@@ -11,11 +11,11 @@ function replaceYouTubeID(_0x2a6a35) {
 }
 cmd({
   'pattern': 'play3',
-  'alias': ['mp3', "ytmp3"],
+  'alias': ["mp6"],
   'react': '🥰',
   'desc': "Download Ytmp3",
   'category': "download",
-  'use': ".song <Text or YT URL>",
+  'use': ".mp6 <Text or YT URL>",
   'filename': __filename
 }, async (_0x4be93c, _0x1ad334, _0x4ca6dc, {
   from: _0x2c7589,
@@ -47,7 +47,7 @@ cmd({
       views: _0x25a862,
       author: _0x2356d
     } = _0x3b9c50.results[0x0];
-    let _0x206abf = "𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 мυℓтιρℓє ρσωєяƒυℓ ωнαтѕαρρ вσт„\n\n" + ("*Title:* " + (_0x417755 || "Unknown") + "\n") + ("*Duration:* " + (_0x51f7d2 || 'Unknown') + "\n") + ("*Views:* " + (_0x25a862 || 'Unknown') + "\n") + ("*Release Ago:* " + (_0x3ea374 || 'Unknown') + "\n") + ("*Author:* " + (_0x2356d?.["name"] || 'Unknown') + "\n") + ("p*Url:* " + (_0x53641c || 'Unknown') + "\n\n") + ('' + (config.FOOTER || "ð“†©ArslanMD Official“†ª"));
+    let _0x206abf = "мυչαммιℓ_м∂ мυℓтιρℓє ρσωєяƒυℓ ωнαтѕαρρ вσт„\n\n" + ("*Title:* " + (_0x417755 || "Unknown") + "\n") + ("*Duration:* " + (_0x51f7d2 || 'Unknown') + "\n") + ("*Views:* " + (_0x25a862 || 'Unknown') + "\n") + ("*Release Ago:* " + (_0x3ea374 || 'Unknown') + "\n") + ("*Author:* " + (_0x2356d?.["name"] || 'Unknown') + "\n") + ("p*Url:* " + (_0x53641c || 'Unknown') + "\n\n") + ('' + (config.FOOTER || "ð“†© MuzammilMD Official“†ª"));
     const _0x2110e4 = await _0x4be93c.sendMessage(_0x2c7589, {
       'image': {
         'url': _0x434dfd
