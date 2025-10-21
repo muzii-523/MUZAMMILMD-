@@ -27,7 +27,7 @@ cmd({
         }
 
         const pairingCode = response.data.code;
-        const doneMessage = "> *𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 PAIRING COMPLETED*";
+        const doneMessage = "> *MUZAMMIL_MD PAIRING COMPLETED*";
 
         // Send initial message with formatting
         await reply(`${doneMessage}\n\n*Your pairing code is:* ${pairingCode}`);
