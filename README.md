@@ -9,6 +9,9 @@
 ---
 
 <p align="center">
+  <a href="https://dashboard.heroku.com/new?template=https://github.com/muzii-523/MUZAMMILMD-">
+    <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-7952B3?style=for-the-badge&logo=heroku&logoColor=white" alt="Deploy to Heroku"/>
+  </a>
   <a href="https://muzammil-deploy-wm9j.vercel.app/">
     <img src="https://img.shields.io/badge/Deploy%20Bot%20(Free%20VPS)-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Deploy Bot (Free VPS)"/>
   </a>
