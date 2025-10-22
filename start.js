@@ -1,4 +1,4 @@
-// Created by Qadeer Brahvi 🚀
+// Created by MUZAMMIL_MD🚀
 // Auto Mega downloader + Baileys starter
 // Fixed version — fully working 2025
 
