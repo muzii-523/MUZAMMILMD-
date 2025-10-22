@@ -1,15 +1,15 @@
 {
-  "name": "Muzammil_MD",
+  "name": "MUZAMMIL-MD",
   "version": "4.5.0",
-  "description": "A WhatsApp Bot Created By MuzammilMD Official",
-  "main": "index.js",
+  "description": "A WhatsApp Bot Created By MUZAMMIL-MD",
+  "main": "start.js",
   "scripts": {
-    "start": "pm2 start index.js --deep-monitoring --attach --name Muzammil_MD",
-    "stop": "pm2 stop Muzammil_MD",
-    "restart": "pm2 restart Muzammil_MD"
+    "start": "pm2 start start.js --deep-monitoring --attach --name MUZAMMIL-MD",
+    "stop": "pm2 stop MUZAMMIL-MD",
+    "restart": "pm2 restart MUZAMMIL-MD"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "github:ArslanMDofficial/ArslanMD-Baileys",
+    "@whiskeysockets/baileys": "github:Jeliostarr/DEV-Baileys",
     "@adiwajshing/keyed-db": "^0.2.4",
     "@dark-yasiya/yt-dl.js": "1.0.5",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
