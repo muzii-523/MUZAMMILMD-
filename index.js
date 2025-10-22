@@ -1,8 +1,8 @@
-// obfuscated By QADEER-AI 
+// obfuscated By Muzammil-md 
 
 // YAHA KYA LANY AYE HOOO YE BTAOO ? MALY GA WESY BHI KUCH NOIII 
 
-// POWERED BY QADEER BRAHVI 
+// POWERED BY Muzammil-md
 
 
 
