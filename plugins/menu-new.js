@@ -1,34 +1,36 @@
-const fs = require('fs');
+Const fs = require('fs');
 const config = require('../config');
 const { cmd, commands } = require('../command');
 const { runtime } = require('../lib/functions');
 const axios = require('axios');
 
-cmd({
-    pattern: "menu",
-    desc: "Show interactive menu system",
-    category: "menu", 
-    react: "🎛️",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    try {
-        const totalCommands = Object.keys(commands).length;
-        
-        // Ultra Pro Max Styled Menu
-        const menuCaption = `
+// --- Helper Functions for Menu Structure ---
+
+/**
+ * Generates the main Ultra Pro Max styled menu caption.
+ * @param {number} totalCommands
+ * @returns {string}
+ */
+const generateMainMenuCaption = (totalCommands) => {
+    // Fallback for missing config values
+    const botName = config.BOT_NAME || 'UltraProMaxBot';
+    const ownerName = config.OWNER_NAME || 'The Developer';
+    const prefix = config.PREFIX || '.';
+    const description = config.DESCRIPTION || 'A powerful WhatsApp Bot.';
+
+    return `
 ╔═══✦❯༒ 𝐔𝐋𝐓𝐑𝐀 𝐏𝐑𝐎 𝐌𝐀𝐗 𝐌𝐄𝐍𝐔 ༒❮✦═══╗
 
 ╭───◉ *「 𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐔𝐒 」*
-│ ◦ 𝗡𝗮𝗺𝗲 : ${MUZAMMIL-MD}
+│ ◦ 𝗡𝗮𝗺𝗲 : ${botName}
 │ ◦ 𝗢𝘄𝗻𝗲𝗿 : MUZAMMIL
 │ ◦ 𝗣𝗹𝗮𝘁𝗳𝗼𝗿𝗺 : Heroku
 │ ◦ 𝗠𝗼𝗱𝗲 : PUBLIC
 │ ◦ 𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀 : ${totalCommands}+
-│ ◦ 𝗣𝗿𝗲𝗳𝗶𝘅 : [ . ]
+│ ◦ 𝗣𝗿𝗲𝗳𝗶𝘅 : [ ${prefix} ]
 ╰─────────────────
 
-╭───◉ *「 𝐒𝐄𝐑𝐕𝐈𝐂𝐄𝐒 」* 
-│ 📥 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗𝗘𝗥
+╭───◉ *「 𝐒𝐄𝐑𝐕𝐈𝐂𝐄𝐒 」* │ 📥 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗𝗘𝗥
 │ 👥 𝗚𝗥𝗢𝗨𝗣
 │ 😄 𝗙𝗨𝗡
 │ 👑 𝗢𝗪𝗡𝗘𝗥
@@ -61,20 +63,28 @@ cmd({
 │ 🎯 User Friendly
 ╰─────────────────
 
-🗂️ *How to Use:* Reply with number (1-10)
-📝 *Example:* Reply "1" for Download Menu
+🗂️ *How to Use:* *1. Simple:* Type *${prefix}download* or *${prefix}group* etc.
+*2. Interactive:* Reply to this message with a number (1-10)
 
-🔮 *Powered by:* ${config.OWNER_NAME}
-💫 *Description:* ${config.DESCRIPTION}
+🔮 *Powered by:* ${ownerName}
+💫 *Description:* ${description}
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-        `.trim();
+    `.trim();
+};
 
-        // Interactive Menu Data
-        const menuData = {
-            '1': {
-                title: "📥 *DOWNLOAD MENU* 📥",
-                content: `
+/**
+ * Returns the data for all sub-menus.
+ * @returns {object}
+ */
+const getMenuData = () => {
+    // Fallback for missing config values
+    const ownerName = config.OWNER_NAME || 'The Developer';
+
+    return {
+        '1': {
+            title: "📥 *DOWNLOAD MENU* 📥",
+            content: `
 ╔═══✦❯༒ 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃𝐄𝐑 ༒❮✦═══╗
 
 ╭───◉ *「 𝐒𝐎𝐂𝐈𝐀𝐋 𝐌𝐄𝐃𝐈𝐀 」*
@@ -106,11 +116,11 @@ cmd({
 💾 *Status:* Active & Working
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '2': {
-                title: "👥 *GROUP MENU* 👥",
-                content: `
+            `
+        },
+        '2': {
+            title: "👥 *GROUP MENU* 👥",
+            content: `
 ╔═══✦❯༒ 𝐆𝐑𝐎𝐔𝐏 𝐌𝐀𝐍𝐀𝐆𝐄𝐑 ༒❮✦═══╗
 
 ╭───◉ *「 𝐌𝐀𝐍𝐀𝐆𝐄𝐌𝐄𝐍𝐓 」*
@@ -141,11 +151,11 @@ cmd({
 🔐 *Privacy:* Secure
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '3': {
-                title: "😄 *FUN MENU* 😄",
-                content: `
+            `
+        },
+        '3': {
+            title: "😄 *FUN MENU* 😄",
+            content: `
 ╔═══✦❯༒ 𝐅𝐔𝐍 & 𝐆𝐀𝐌𝐄𝐒 ༒❮✦═══╗
 
 ╭───◉ *「 𝐈𝐍𝐓𝐄𝐑𝐀𝐂𝐓𝐈𝐕𝐄 」*
@@ -176,11 +186,11 @@ cmd({
 😊 *Mood:* Always Happy
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '4': {
-                title: "👑 *OWNER MENU* 👑",
-                content: `
+            `
+        },
+        '4': {
+            title: "👑 *OWNER MENU* 👑",
+            content: `
 ╔═══✦❯༒ 𝐎𝐖𝐍𝐄𝐑 𝐎𝐍𝐋𝐘 ༒❮✦═══╗
 
 ╭───◉ *「 𝐁𝐎𝐓 𝐂𝐎𝐍𝐓𝐑𝐎𝐋 」*
@@ -209,16 +219,16 @@ cmd({
 🔒 *Security:* Maximum
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '5': {
-                title: "🤖 *AI MENU* 🤖",
-                content: `
+            `
+        },
+        '5': {
+            title: "🤖 *AI MENU* 🤖",
+            content: `
 ╔═══✦❯༒ 𝐀𝐑𝐓𝐈𝐅𝐈𝐂𝐈𝐀𝐋 𝐈𝐍𝐓𝐄𝐋𝐋𝐈𝐆𝐄𝐍𝐂𝐄 ༒❮✦═══╗
 
 ╭───◉ *「 𝐂𝐇𝐀𝐓 𝐀𝐈 」*
 │ • .ai [query]
-│ • .gpt [query]
+│ • • .gpt [query]
 │ • .gpt3 [query]
 │ • .gpt4 [query]
 │ • .meta [query]
@@ -241,11 +251,11 @@ cmd({
 🚀 *Speed:* Instant
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '6': {
-                title: "🎎 *ANIME MENU* 🎎", 
-                content: `
+            `
+        },
+        '6': {
+            title: "🎎 *ANIME MENU* 🎎", 
+            content: `
 ╔═══✦❯༒ 𝐀𝐍𝐈𝐌𝐄 𝐖𝐎𝐑𝐋𝐃 ༒❮✦═══╗
 
 ╭───◉ *「 𝐀𝐍𝐈𝐌𝐄 𝐈𝐌𝐀𝐆𝐄𝐒 」*
@@ -276,11 +286,11 @@ cmd({
 ❤️ *Weeb Level:* Pro
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '7': {
-                title: "🔄 *CONVERT MENU* 🔄",
-                content: `
+            `
+        },
+        '7': {
+            title: "🔄 *CONVERT MENU* 🔄",
+            content: `
 ╔═══✦❯༒ 𝐂𝐎𝐍𝐕𝐄𝐑𝐓𝐄𝐑 ༒❮✦═══╗
 
 ╭───◉ *「 𝐌𝐄𝐃𝐈𝐀 」*
@@ -309,11 +319,11 @@ cmd({
 ⚡ *Speed:* Ultra Fast
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '8': {
-                title: "📌 *OTHER MENU* 📌",
-                content: `
+            `
+        },
+        '8': {
+            title: "📌 *OTHER MENU* 📌",
+            content: `
 ╔═══✦❯༒ 𝐔𝐓𝐈𝐋𝐈𝐓𝐈𝐄𝐒 ༒❮✦═══╗
 
 ╭───◉ *「 𝐓𝐎𝐎𝐋𝐒 」*
@@ -343,11 +353,11 @@ cmd({
 📊 *Info:* Real-time
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '9': {
-                title: "💞 *REACTIONS MENU* 💞",
-                content: `
+            `
+        },
+        '9': {
+            title: "💞 *REACTIONS MENU* 💞",
+            content: `
 ╔═══✦❯༒ 𝐑𝐄𝐀𝐂𝐓𝐈𝐎𝐍𝐒 ༒❮✦═══╗
 
 ╭───◉ *「 𝐀𝐅𝐅𝐄𝐂𝐓𝐈𝐎𝐍 」*
@@ -378,11 +388,11 @@ cmd({
 🎭 *Interactive:* Yes
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            },
-            '10': {
-                title: "🏠 *MAIN MENU* 🏠",
-                content: `
+            `
+        },
+        '10': {
+            title: "🏠 *MAIN MENU* 🏠",
+            content: `
 ╔═══✦❯༒ 𝐌𝐀𝐈𝐍 𝐌𝐄𝐍𝐔 ༒❮✦═══╗
 
 ╭───◉ *「 𝐁𝐎𝐓 𝐈𝐍𝐅𝐎 」*
@@ -409,28 +419,76 @@ cmd({
 ╰─────────────────
 
 🌟 *Version:* Ultra Pro Max
-🔮 *Developer:* ${config.OWNER_NAME}
+🔮 *Developer:* ${ownerName}
 
 ╚═══✦❯༒ 𝐌𝐔𝐙𝐀𝐌𝐌𝐈𝐋 𝐌𝐃 ༒❮✦═══╝
-                `
-            }
-        };
+            `
+        }
+    };
+};
 
+
+// --- Main Command Handler ---
+
+cmd({
+    pattern: "menu",
+    desc: "Show interactive menu system",
+    category: "menu", 
+    react: "🎛️",
+    filename: __filename
+}, async (conn, mek, m, { from, reply, text }) => {
+    try {
+        const totalCommands = Object.keys(commands).length;
+        const menuData = getMenuData();
         const contextInfo = {
             mentionedJid: [m.sender],
             forwardingScore: 999,
             isForwarded: true,
             forwardedNewsletterMessageInfo: {
                 newsletterJid: '120363403831162407@newsletter',
-                newsletterName: config.OWNER_NAME,
+                newsletterName: config.OWNER_NAME || 'MUZAMMIL',
                 serverMessageId: 143
             }
         };
 
-        // Send main menu
-        let sentMsg;
+        // 1. Check if a sub-menu number was provided (e.g., .menu 1)
+        if (text && menuData[text.trim()]) {
+             const selectedMenu = menuData[text.trim()];
+             
+             try {
+                // Attempt to send with image
+                await conn.sendMessage(
+                    from,
+                    {
+                        image: { 
+                            url: config.MENU_IMAGE_URL || 'https://i.ibb.co/0jqkQ5p/ultra-pro-max.jpg' 
+                        },
+                        caption: selectedMenu.content,
+                        contextInfo: contextInfo
+                    },
+                    { quoted: mek }
+                );
+            } catch (e) {
+                // Fallback to text if image fails
+                await conn.sendMessage(
+                    from,
+                    { 
+                        text: selectedMenu.content, 
+                        contextInfo: contextInfo 
+                    },
+                    { quoted: mek }
+                );
+            }
+            return;
+        }
+
+        // 2. If no valid text/number, send the main menu
+
+        const menuCaption = generateMainMenuCaption(totalCommands);
+        
         try {
-            sentMsg = await conn.sendMessage(
+            // Attempt to send main menu with image
+            await conn.sendMessage(
                 from,
                 {
                     image: { 
@@ -443,7 +501,8 @@ cmd({
                 { quoted: mek }
             );
         } catch (e) {
-            sentMsg = await conn.sendMessage(
+            // Fallback to text if image fails
+            await conn.sendMessage(
                 from,
                 { 
                     text: menuCaption, 
@@ -453,70 +512,17 @@ cmd({
             );
         }
 
-        const messageID = sentMsg.key.id;
-
-        // Interactive handler
-        const handler = async (msgData) => {
-            try {
-                const receivedMsg = msgData.messages[0];
-                if (!receivedMsg?.message || !receivedMsg.key?.remoteJid) return;
-
-                const isReplyToMenu = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
-                
-                if (isReplyToMenu) {
-                    const receivedText = receivedMsg.message.conversation || 
-                                      receivedMsg.message.extendedTextMessage?.text;
-                    const senderID = receivedMsg.key.remoteJid;
-
-                    if (menuData[receivedText]) {
-                        const selectedMenu = menuData[receivedText];
-                        
-                        await conn.sendMessage(
-                            senderID,
-                            {
-                                image: { 
-                                    url: config.MENU_IMAGE_URL || 'https://i.ibb.co/0jqkQ5p/ultra-pro-max.jpg' 
-                                },
-                                caption: selectedMenu.content,
-                                contextInfo: contextInfo
-                            },
-                            { quoted: receivedMsg }
-                        );
-
-                        await conn.sendMessage(senderID, {
-                            react: { text: '✅', key: receivedMsg.key }
-                        });
-
-                    } else {
-                        await conn.sendMessage(
-                            senderID,
-                            {
-                                text: `❌ *INVALID SELECTION!* ❌\n\nPlease reply with number 1-10 only.\n\n*Example:* Reply "1" for Download Menu\n\n🔧 Need help? Contact: ${config.OWNER_NAME}`,
-                                contextInfo: contextInfo
-                            },
-                            { quoted: receivedMsg }
-                        );
-                    }
-                }
-            } catch (e) {
-                console.log('Handler error:', e);
-            }
-        };
-
-        // Add listener
-        conn.ev.on("messages.upsert", handler);
-
-        // Remove listener after 10 minutes
-        setTimeout(() => {
-            conn.ev.off("messages.upsert", handler);
-        }, 600000);
+        // --- INTERACTIVE HANDLER REMOVED ---
+        // The original code used a temporary messages.upsert listener (handler) which is complex
+        // and prone to memory leaks in a multi-user environment.
+        // The suggested usage is: User sends ".menu" -> Bot sends menu -> User sends ".menu 1" for Download Menu.
 
     } catch (e) {
-        console.error('Menu Error:', e);
+        console.error('Menu Command Error:', e);
         await conn.sendMessage(
             from,
             { 
-                text: `🌀 *SYSTEM BUSY* 🌀\n\nUltra Pro Max Menu is currently optimizing...\n\nPlease try again in few seconds!\n\n⚡ Powered by: ${config.OWNER_NAME}` 
+                text: `❌ *MENU ERROR* ❌\n\nAn error occurred while generating the menu. The system might be missing configuration values (like config.OWNER_NAME or config.MENU_IMAGE_URL).\n\nDetails: ${e.message.slice(0, 100)}...` 
             },
             { quoted: mek }
         );
