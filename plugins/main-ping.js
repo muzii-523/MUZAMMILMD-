@@ -1,98 +1,185 @@
 const config = require('../config');
 const { cmd, commands } = require('../command');
 
-// Array of different fancy text styles for ARSLAN-MD
-const botNameStyles = [
-    "๓นຊค๓๓il_๓໓",
-    "🄼🅄🅉🄰🄼🄼🄸🄻_🄼🄳",
-    "🅼🆄🆉🅰🅼🅼🅸🅻_🅼🅳",
-    "๓นຊค๓๓il_๓໓",
-    "ⱮԱɀȺⱮⱮįꝈ_ⱮᎠ",
-    "爪ㄩ乙卂爪爪丨ㄥ_爪ᗪ",
-    "𝓜𝓤𝓩𝓐𝓜𝓜𝓘𝓛_𝓜𝓓",
-    "ꪑꪊɀꪖꪑꪑﺃꪶ_ꪑᦔ",
-    "𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻",
-    "ₘᵤZₐₘₘᵢₗ_ₘD"
+// MUZAMMIL_MD Styles
+const nameStyles = [
+    "🇲 🇺 🇿 🇦 🇲 🇲 🇮 🇱 _ 🇲 🇩",
+    "✨ 𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻 ✨", 
+    "💎 𝓜𝓤𝓩𝓐𝓜𝓜𝓘𝓛_𝓜𝓓 💎",
+    "🔥 ⓂⓊⓏⓐⓜⓜⓘⓛ_Ⓜⓓ 🔥",
+    "🚀 𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 🚀",
+    "🌟 𝕸𝖀𝖅𝕬𝕸𝕸𝕴𝕷_𝕸𝕯 🌟",
+    "🎯 𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 🎯",
+    "⚡ 𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻 ⚡",
+    "🏆 𝓜𝓤𝓩𝓐𝓜𝓜𝓘𝓛_𝓜𝓓 🏆",
+    "💫 𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 💫"
 ];
 
-// Track current style index
-let currentStyleIndex = 0;
+let currentStyle = 0;
 
 cmd({
     pattern: "ping",
     alias: ["speed","pong"],
     use: '.ping',
-    desc: "Check bot's response time.",
+    desc: "Check bot's response time",
     category: "main",
-    react: "🌡️",
+    react: "💎",
     filename: __filename
 },
 async (conn, mek, m, { from, quoted, sender, reply }) => {
     try {
         const start = new Date().getTime();
-
-        const reactionEmojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹'];
-        const textEmojis = ['💎', '🏆', '⚡️', '🚀', '🎶', '🌠', '🌀', '🔱', '🛡️', '✨'];
-
-        const reactionEmoji = reactionEmojis[Math.floor(Math.random() * reactionEmojis.length)];
-        let textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
-
-        // Ensure reaction and text emojis are different
-        while (textEmoji === reactionEmoji) {
-            textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
-        }
-
-        // Send reaction using conn.sendMessage()
+        
+        // Reaction
         await conn.sendMessage(from, {
-            react: { text: textEmoji, key: mek.key }
+            react: { text: "⚡", key: mek.key }
         });
 
         const end = new Date().getTime();
-        const responseTime = (end - start) / 1000;
+        const speed = (end - start) / 1000;
 
-        // Get current fancy bot name and rotate for next time
-        const fancyBotName = botNameStyles[currentStyleIndex];
-        currentStyleIndex = (currentStyleIndex + 1) % botNameStyles.length;
+        // Get Name Style
+        const botName = nameStyles[currentStyle];
+        currentStyle = (currentStyle + 1) % nameStyles.length;
 
-        const text = `> *${fancyBotName} SPEED: ${responseTime.toFixed(2)}ms ${reactionEmoji}*`;
+        // Ping Message
+        const pingMessage = `
+╔═══✦〖 💠 𝑷𝑰𝑵𝑮 𝑺𝑻𝑨𝑻𝑼𝑺 💠 〗✦═══╗
+│
+│    ✦ *${botName}* ✦
+│
+│  📊 *𝐒𝐏𝐄𝐄𝐃:* ${speed.toFixed(2)}ms
+│  ⚡ *𝐒𝐓𝐀𝐓𝐔𝐒:* Ultra Fast
+│  💎 *𝐏𝐄𝐑𝐅𝐎𝐑𝐌𝐀𝐍𝐂𝐄:* Excellent
+│  🚀 *𝐑𝐄𝐒𝐏𝐎𝐍𝐒𝐄:* Optimal
+│
+╚═══✦《 🏆 𝑴𝑼𝒁𝑨𝑴𝑴𝑰𝑳_𝑴𝑫 🏆 》✦═══╝
+`;
 
         await conn.sendMessage(from, {
-            text,
+            text: pingMessage,
             contextInfo: {
                 mentionedJid: [sender],
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: '120363403831162407@newsletter',
-                    newsletterName: "𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻",
+                    newsletterName: "✨ 𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻 ✨",
                     serverMessageId: 143
                 }
             }
         }, { quoted: mek });
 
-    } catch (e) {
-        console.error("Error in ping command:", e);
-        reply(`An error occurred: ${e.message}`);
+    } catch (error) {
+        console.error("Ping Error:", error);
+        reply(`❌ *ERROR:* ${error.message}`);
     }
 });
 
-// ping2 remains unchanged
+// Ping2 Command
 cmd({
     pattern: "ping2",
-    desc: "Check bot's response time.",
-    category: "main",
-    react: "🍂",
+    alias: ["speedtest"],
+    desc: "Advanced ping test",
+    category: "main", 
+    react: "👑",
     filename: __filename
 },
-async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+async (conn, mek, m, { from, reply }) => {
     try {
-        const startTime = Date.now()
-        const message = await conn.sendMessage(from, { text: '*PINGING...*' })
-        const endTime = Date.now()
-        const ping = endTime - startTime
-        await conn.sendMessage(from, { text: `*🔥 𝙈𝙐𝙕𝘼𝙈𝙈𝙄𝙇_𝙈𝘿 SPEED : ${ping}ms*` }, { quoted: message })
-    } catch (e) {
-        console.log(e)
-        reply(`${e}`)
+        const startTime = Date.now();
+        const processingMsg = await reply("🔮 *Performance Test Running...*");
+        
+        const endTime = Date.now();
+        const pingTime = endTime - startTime;
+
+        // Performance Analysis
+        let status = "";
+        let emoji = "";
+
+        if (pingTime < 100) {
+            status = "𝐔𝐋𝐓𝐑𝐀 𝐅𝐀𝐒𝐓";
+            emoji = "⚡";
+        } else if (pingTime < 300) {
+            status = "𝐕𝐄𝐑𝐘 𝐅𝐀𝐒𝐓"; 
+            emoji = "🚀";
+        } else if (pingTime < 600) {
+            status = "𝐅𝐀𝐒𝐓";
+            emoji = "💨";
+        } else {
+            status = "𝐌𝐎𝐃𝐄𝐑𝐀𝐓𝐄";
+            emoji = "🐢";
+        }
+
+        const result = `
+▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃
+
+       🏁 *𝑺𝑷𝑬𝑬𝑫𝑻𝑬𝑺𝑻* 🏁
+
+▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃
+
+✦ *𝐁𝐎𝐓 𝐍𝐀𝐌𝐄:* 𝕄𝕌ℤ𝔸𝕄𝕄𝕀𝕃_𝕄𝔻
+✦ *𝐑𝐄𝐒𝐏𝐎𝐍𝐒𝐄:* ${pingTime}ms
+✦ *𝐒𝐓𝐀𝐓𝐔𝐒:* ${status} ${emoji}
+✦ *𝐒𝐄𝐑𝐕𝐄𝐑:* Optimized
+
+▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃
+
+        💫 *𝑴𝑼𝒁𝑨𝑴𝑴𝑰𝑳_𝑴𝑫* 💫
+`;
+
+        await conn.sendMessage(from, { 
+            text: result, 
+            edit: processingMsg.key 
+        });
+
+    } catch (error) {
+        console.error(error);
+        reply(`🎯 *TEST FAILED:* ${error.message}`);
     }
-})
+});
+
+// Ultimate Ping
+cmd({
+    pattern: "mping", 
+    alias: ["mp","muzping"],
+    desc: "Ultimate ping command",
+    category: "main",
+    react: "🏆",
+    filename: __filename
+},
+async (conn, mek, m, { from, reply }) => {
+    try {
+        const start = Date.now();
+        
+        // Multiple reactions
+        await conn.sendMessage(from, { react: { text: "💎", key: mek.key } });
+        await new Promise(resolve => setTimeout(resolve, 200));
+        await conn.sendMessage(from, { react: { text: "👑", key: mek.key } });
+
+        const latency = Date.now() - start;
+
+        const ultimatePing = `
+██████████████████████
+
+   ♛ *𝑼𝑳𝑻𝑰𝑴𝑨𝑻𝑬 𝑷𝑰𝑵𝑮* ♛
+
+██████████████████████
+
+★ *𝐁𝐎𝐓:* 𝗠𝗨𝗭𝗔𝗠𝗠𝗜𝗟_𝗠𝗗
+★ *𝐏𝐈𝐍𝐆:* ${latency}ms
+★ *𝐒𝐓𝐀𝐓𝐔𝐒:* Active
+★ *𝐏𝐎𝐖𝐄𝐑:* Ultra High
+
+██████████████████████
+
+    ✨ *𝑴𝑼𝒁𝑨𝑴𝑴𝑰𝑳_𝑴𝑫* ✨
+`;
+
+        await reply(ultimatePing);
+
+    } catch (error) {
+        console.error(error);
+        reply(`💢 *ERROR:* ${error.message}`);
+    }
+});
